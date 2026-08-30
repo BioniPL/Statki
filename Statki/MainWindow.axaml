@@ -11,15 +11,19 @@
 
         <Grid>
                 <Canvas x:Name="Mapa_Gry" IsVisible="True">
-                        <Image x:Name="Gracz" Source="/Assets/south0.png" Width="50" Height="50" Canvas.Top="100" Canvas.Left="100"/>
+                        <Image x:Name="Gracz" Source="/Assets/gracz/south0.png" Width="50" Height="50" Canvas.Top="100" Canvas.Left="100"/>
                         <Image x:Name="Bandyta" Source="/Assets/bandyta/bandyta0.png" Width="50" Height="50" Canvas.Top="200" Canvas.Left="300"/>
+                        <TextBlock x:Name="StatystykiGraczaNaSwiecie" Text="test" FontSize="20" HorizontalAlignment="Center"/>
                 </Canvas>
                 
 
                 <Grid x:Name="Walka_GUI" IsVisible="False">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                                <TextBlock x:Name="OpisWalki" Text="Walka!" FontSize="20" HorizontalAlignment="Center"/>
                                 <Button Content="Ucieczka" Click="Ucieczka"/>
-                                <Button>Test2</Button>
+                                <Button Content="Lekki Atak" Click="Lekki_Atak"/>
+                                <Button Content="Średni Atak" Click="Sredni_Atak"/>
+                                <Button Content="Mocny Atak" Click="Mocny_Atak"/>
                         </StackPanel>
                 </Grid>
         </Grid>

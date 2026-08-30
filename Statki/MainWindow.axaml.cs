@@ -10,10 +10,6 @@ namespace Statki;
 
 public partial class MainWindow : Window
 {
-    private int klatka_gracz = 1;
-    private int klatka_bandayta = 1;
-    private DispatcherTimer ruch_bandziora;
-
     public MainWindow()
     {
         InitializeComponent();
@@ -22,6 +18,56 @@ public partial class MainWindow : Window
         ruch_bandziora.Interval = TimeSpan.FromMilliseconds(300);
         ruch_bandziora.Tick += Animacja_Bandyty;
         ruch_bandziora.Start();
+        
+        StatystykiGraczaNaSwiecie.Text = $"HP: {gracz.HP}/{gracz.Max_HP} | Atak: {gracz.Atak} | Obrona: {gracz.Obrona}";
+    }
+    
+    private int klatka_gracz = 1;
+    private int klatka_bandayta = 1;
+    private DispatcherTimer ruch_bandziora;
+    
+    private Gracz gracz = new Gracz("Gracz");
+    private Przeciwnik wrog = new Przeciwnik("Bandyta", 1);
+    
+
+    public void Lekki_Atak(object? sender, RoutedEventArgs e)
+    {
+        gracz.Atak_Lekki(wrog);
+        Console.WriteLine($"Zaatakowałeś! HP wroga: {wrog.HP}/{wrog.Max_HP}");
+        if (wrog.HP <= 0)
+        {
+            Ucieczka(Gracz, e);
+            return;
+        }
+        Console.Write("Ruch Przeciwnika! - ");
+        wrog.Wykonaj_Atak_Bot(gracz);
+        OpisWalki.Text = $"Twoje HP: {gracz.HP}/{gracz.Max_HP} | HP wroga: {wrog.HP}/{wrog.Max_HP}";
+    }
+    public void Sredni_Atak(object? sender, RoutedEventArgs e)
+    {
+        gracz.Atak_Sredni(wrog);
+        Console.WriteLine($"Zaatakowałeś! HP wroga: {wrog.HP}/{wrog.Max_HP}");
+        if (wrog.HP <= 0)
+        {
+            Ucieczka(Gracz, e);
+            return;
+        }
+        Console.Write("Ruch Przeciwnika! - ");
+        wrog.Wykonaj_Atak_Bot(gracz);
+        OpisWalki.Text = $"Twoje HP: {gracz.HP}/{gracz.Max_HP} | HP wroga: {wrog.HP}/{wrog.Max_HP}";
+    }
+    public void Mocny_Atak(object? sender, RoutedEventArgs e)
+    {
+        gracz.Atak_Mocny(wrog);
+        Console.WriteLine($"Zaatakowałeś! HP wroga: {wrog.HP}/{wrog.Max_HP}");
+        if (wrog.HP <= 0)
+        {
+            Ucieczka(Gracz, e);
+            return;
+        }
+        Console.Write("Ruch Przeciwnika! - ");
+        wrog.Wykonaj_Atak_Bot(gracz);
+        OpisWalki.Text = $"Twoje HP: {gracz.HP}/{gracz.Max_HP} | HP wroga: {wrog.HP}/{wrog.Max_HP}";
     }
 
     public void Animacja_Bandyty(object? sender, EventArgs e)
@@ -47,9 +93,9 @@ public partial class MainWindow : Window
 
         if (kolizjaY && kolizjaX)
         {
-            Console.WriteLine("NAPADŁ NA MNIE TEN BURAK");
             Walka_GUI.IsVisible = true;
             Mapa_Gry.IsVisible = false;
+            OpisWalki.Text = $"Twoje HP: {gracz.HP}/{gracz.Max_HP} | HP wroga: {wrog.HP}/{wrog.Max_HP}";
             return true;
         }
         Walka_GUI.IsVisible = false;
@@ -59,6 +105,7 @@ public partial class MainWindow : Window
 
     public void Ucieczka(object? sender, RoutedEventArgs e)
     {
+        StatystykiGraczaNaSwiecie.Text = $"HP: {gracz.HP}/{gracz.Max_HP} | Atak: {gracz.Atak} | Obrona: {gracz.Obrona}";
         Random losowe = new Random();
         int cos = losowe.Next(4);
         if (cos == 1)
@@ -87,19 +134,19 @@ public partial class MainWindow : Window
     {
         if (klawisz.Key == Key.W)
         {
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/north0.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/gracz/north0.png")));
         }
         if (klawisz.Key == Key.A)
         {
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/west0.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/gracz/west0.png")));
         }
         if (klawisz.Key == Key.S)
         {
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/south0.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/gracz/south0.png")));
         }
         if (klawisz.Key == Key.D)
         {
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/east0.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri("avares://Statki/Assets/gracz/east0.png")));
         }
     }
     
@@ -116,7 +163,7 @@ public partial class MainWindow : Window
         {
             wartosc_gora=wartosc_gora-3;
             Canvas.SetTop(Gracz, wartosc_gora);
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/north{klatka_gracz}.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/gracz/north{klatka_gracz}.png")));
             klatka_gracz++;
             if(klatka_gracz > 6)
             {
@@ -127,7 +174,7 @@ public partial class MainWindow : Window
         {
             wartosc_lewa=wartosc_lewa-3;
             Canvas.SetLeft(Gracz, wartosc_lewa);
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/west{klatka_gracz}.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/gracz/west{klatka_gracz}.png")));
             klatka_gracz++;
             if(klatka_gracz > 6)
             {
@@ -138,7 +185,7 @@ public partial class MainWindow : Window
         {
             wartosc_gora=wartosc_gora+3;
             Canvas.SetTop(Gracz, wartosc_gora);
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/south{klatka_gracz}.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/gracz/south{klatka_gracz}.png")));
             klatka_gracz++;
             if(klatka_gracz > 6)
             {
@@ -149,7 +196,7 @@ public partial class MainWindow : Window
         {
             wartosc_lewa=wartosc_lewa+3;
             Canvas.SetLeft(Gracz, wartosc_lewa);
-            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/east{klatka_gracz}.png")));
+            Gracz.Source = new Bitmap(AssetLoader.Open(new Uri($"avares://Statki/Assets/gracz/east{klatka_gracz}.png")));
             klatka_gracz++;
             if(klatka_gracz > 6)
             {
